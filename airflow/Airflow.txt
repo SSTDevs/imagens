@@ -1,0 +1,755 @@
+https://airflow.apache.org/docs/apache-airflow/stable/index.html
+https://github.com/SSTDevs/hands-on_Composer-Dataproc
+https://docs.google.com/presentation/d/12qGgUL7esaPGImh-yEB1l6UZJOLogCzGqn0CyuR-vu0/edit#slide=id.g25645cdcce7_0_2
+https://kdenlive.org/en/
+https://partner.cloudskillsboost.google/paths/77
+-----------------------
+https://partner.cloudskillsboost.google/paths/90
+https://partner.cloudskillsboost.google/paths/79
+https://partner.cloudskillsboost.google/paths/83
+https://partner.cloudskillsboost.google/paths/82
+https://partner.cloudskillsboost.google/paths/78
+----------------------------------
+- 2 módulos acelerador para entregar : estourado
+- materiais de treinamento : sem prazo
+
+- Plataforma para migração para camada raw e trusted
+--------------------------
+Ofertar solução para o marketplace da google.
+https://cloud.google.com/duet-ai?hl=en
+https://cloud.google.com/database-migration/pricing#all-migrations
+----------------------------
+export AIRFLOW_HOME=~/airflow
+
+AIRFLOW_VERSION=2.7.3
+
+# Extract the version of Python you have installed. If you're currently using a Python version that is not supported by Airflow, you may want to set this manually.
+# See above for supported versions.
+PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+
+CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+# For example this would install 2.7.3 with python 3.8: https://raw.githubusercontent.com/apache/airflow/constraints-2.7.3/constraints-3.8.txt
+
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+
+airflow standalone
+----------------
+export AIRFLOW_HOME=~/airflow
+
+AIRFLOW_VERSION=2.7.3
+
+PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+
+CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+
+airflow standalone
+--------------------
+os.system('clear')
+os.environ['x']='teste'
+os.system('echo $x')
+-----------------
+!pip install "apache-airflow==2.7.3" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.7.3/constraints-3.10.txt"
+
+!pip3 install "apache-airflow==2.7.3" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.7.3/constraints-3.9.txt"
+---------------------------
+https://colab.research.google.com/drive/199n8GgvO66W-5cOPJuxUTG5O-9dlmfCd#scrollTo=vgWk52-OmVH1
+
+!pip install apache-airflow
+!airflow standalone
+!airflow webserver -p 8080
+!pip install pyngrok
+kill $(pgrep airflow)
+$ airflow config get-value api auth_backends
+airflow.api.auth.backend.basic_auth
+secret_key = qh0lXcOEB5ZNWWQJV5RbeA==
+
+https://stackoverflow.com/questions/61329923/apache-airflow-rest-api-authentication
+https://cloud.google.com/composer/docs/access-airflow-api#allow_api_calls_to_airflow_rest_api_using_webserver_access_control
+-------------------
+airflow users create \
+--username test \
+--password test \
+--role Admin \
+--firstname test \
+--lastname test \
+--email test@test.com
+--------------------------
+find / -name dags_folder
+
+/usr/lib/google-cloud-sdk/lib/surface/composer/environments/storage/dags
+/usr/local/lib/python3.9/site-packages/airflow/example_dags
+export AIRFLOW_HOME=/root/airflow
+
+airflow scheduler -D
+apt-get install git
+
+token_classic="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"
+git clone https://${token_classic}@github.com/SSTDevs/airflow
+------------------------------------
+ mv DAG_dataproc_tutorial.py /usr/local/lib/python3.9/site-packages/airflow/example_dags
+rm -r  airflow/
+---------------
+ctrl z 
+bg
+---------------
+bash
+python
+cloud (cloud function, bigquery)?
+---------------------------
+Another way to create users is in the UI login page, allowing user self registration through a “Register” button. The following entries in the $AIRFLOW_HOME/webserver_config.py can be edited to make it possible:
+
+AUTH_USER_REGISTRATION = True
+AUTH_USER_REGISTRATION_ROLE = "Desired Role For The Self Registered User"
+RECAPTCHA_PRIVATE_KEY = 'private_key'
+RECAPTCHA_PUBLIC_KEY = 'public_key'
+
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_USE_TLS = True
+MAIL_USERNAME = 'yourappemail@gmail.com'
+MAIL_PASSWORD = 'passwordformail'
+MAIL_DEFAULT_SENDER = 'sender@gmail.com'
+---------------------------
+https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html
+-------------------------
+python ~/airflow/dags/tutorial.py
+--------------------------
+# initialize the database tables
+airflow db migrate
+
+# print the list of active DAGs
+airflow dags list
+
+# prints the list of tasks in the "tutorial" DAG
+airflow tasks list tutorial
+
+# prints the hierarchy of tasks in the "tutorial" DAG
+airflow tasks list tutorial --tree
+---------------------------
+# command layout: command subcommand [dag_id] [task_id] [(optional) date]
+
+# testing print_date
+airflow tasks test tutorial print_date 2015-06-01
+
+# testing sleep
+airflow tasks test tutorial sleep 2015-06-01
+
+# command layout: command subcommand [dag_id] [task_id] [(optional) date]
+
+# testing print_date
+airflow tasks test tutorial print_date 2015-06-01
+
+# testing sleep
+airflow tasks test tutorial sleep 2015-06-01
+-----------------------------
+Note that if you use depends_on_past=True, individual task instances will depend on the success of their previous task instance (that is, previous according to the logical date). Task instances with their logical dates equal to start_date will disregard this dependency because there would be no past task instances created for them.
+----------------------------
+# optional, start a web server in debug mode in the background
+# airflow webserver --debug &
+
+# start your backfill on a date range
+airflow dags backfill tutorial \
+    --start-date 2015-06-01 \
+    --end-date 2015-06-07
+
+-----------------------------
+
+import json
+
+import pendulum
+
+from airflow.decorators import dag, task
+@dag(
+    schedule=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["example"],
+)
+def tutorial_taskflow_api():
+    """
+    ### TaskFlow API Tutorial Documentation
+    This is a simple data pipeline example which demonstrates the use of
+    the TaskFlow API using three simple tasks for Extract, Transform, and Load.
+    Documentation that goes along with the Airflow TaskFlow API tutorial is
+    located
+    [here](https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html)
+    """
+    @task()
+    def extract():
+        """
+        #### Extract task
+        A simple Extract task to get data ready for the rest of the data
+        pipeline. In this case, getting data is simulated by reading from a
+        hardcoded JSON string.
+        """
+        data_string = '{"1001": 301.27, "1002": 433.21, "1003": 502.22}'
+
+        order_data_dict = json.loads(data_string)
+        return order_data_dict
+    @task(multiple_outputs=True)
+    def transform(order_data_dict: dict):
+        """
+        #### Transform task
+        A simple Transform task which takes in the collection of order data and
+        computes the total order value.
+        """
+        total_order_value = 0
+
+        for value in order_data_dict.values():
+            total_order_value += value
+
+        return {"total_order_value": total_order_value}
+    @task()
+    def load(total_order_value: float):
+        """
+        #### Load task
+        A simple Load task which takes in the result of the Transform task and
+        instead of saving it to end user review, just prints it out.
+        """
+
+        print(f"Total order value is: {total_order_value:.2f}")
+    order_data = extract()
+    order_summary = transform(order_data)
+    load(order_summary["total_order_value"])
+tutorial_taskflow_api()
+----------------------
+@dag(
+    schedule=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["example"],
+)
+def tutorial_taskflow_api():
+    """
+    ### TaskFlow API Tutorial Documentation
+    This is a simple data pipeline example which demonstrates the use of
+    the TaskFlow API using three simple tasks for Extract, Transform, and Load.
+    Documentation that goes along with the Airflow TaskFlow API tutorial is
+    located
+    [here](https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html)
+    """
+
+Now to actually enable this to be run as a DAG, we invoke the Python function tutorial_taskflow_api set up using the @dag decorator earlier, as shown below.
+
+tutorial_taskflow_api()
+--------------------------
+In this data pipeline, tasks are created based on Python functions using the @task decorator as shown below. The function name acts as a unique identifier for the task.
+-------------------------
+That’s it, we are done! We have invoked the Extract task, obtained the order data from there and sent it over to the Transform task for summarization, and then invoked the Load task with the summarized data. The dependencies between the tasks and the passing of data between these tasks which could be running on different workers on different nodes on the network is all handled by Airflow.
+
+Now to actually enable this to be run as a DAG, we invoke the Python function tutorial_taskflow_api set up using the @dag decorator earlier, as shown below.
+-----------------------------------
+airflow 1.x
+
+def transform(**kwargs):
+    ti = kwargs["ti"]
+    extract_data_string = ti.xcom_pull(task_ids="extract", key="order_data")
+    order_data = json.loads(extract_data_string)
+
+    total_order_value = 0
+    for value in order_data.values():
+        total_order_value += value
+
+    total_value = {"total_order_value": total_order_value}
+    total_value_json_string = json.dumps(total_value)
+    ti.xcom_push("total_order_value", total_value_json_string)
+-------------------------
+airflow 2.0
+
+@task(multiple_outputs=True)
+def transform(order_data_dict: dict):
+    """
+    #### Transform task
+    A simple Transform task which takes in the collection of order data and
+    computes the total order value.
+    """
+    total_order_value = 0
+
+    for value in order_data_dict.values():
+        total_order_value += value
+
+    return {"total_order_value": total_order_value}
+---------------------------
+from airflow.decorators import task, dag
+from datetime import datetime
+
+
+@task
+def add_task(x, y):
+    print(f"Task args: x={x}, y={y}")
+    return x + y
+
+
+@dag(start_date=datetime(2022, 1, 1))
+def mydag():
+    start = add_task.override(task_id="start")(1, 2)
+    for i in range(3):
+        start >> add_task.override(task_id=f"add_start_{i}")(start, i)
+
+
+@dag(start_date=datetime(2022, 1, 1))
+def mydag2():
+    start = add_task(1, 2)
+    for i in range(3):
+        start >> add_task.override(task_id=f"new_add_task_{i}")(start, i)
+
+
+first_dag = mydag()
+second_dag = mydag2()
+------------------------------
+You can also import the above add_task and use it in another DAG file. Suppose the add_task code lives in a file called common.py. You can do this:
+
+from common import add_task
+from airflow.decorators import dag
+from datetime import datetime
+
+
+@dag(start_date=datetime(2022, 1, 1))
+def use_add_task():
+    start = add_task.override(priority_weight=3)(1, 2)
+    for i in range(3):
+        start >> add_task.override(task_id=f"new_add_task_{i}", retries=4)(start, i)
+
+
+created_dag = use_add_task()
+--------------------------
+The simplest approach is to create dynamically (every time a task is run) a separate virtual environment on the same machine, you can use the @task.virtualenv decorator. The decorator allows you to create dynamically a new virtualenv with custom libraries and even a different Python version to run your function.
+---------------------------
+    @task.virtualenv(
+        task_id="virtualenv_python", requirements=["colorama==0.4.0"], system_site_packages=False
+    )
+    def callable_virtualenv():
+        """
+        Example function that will be performed in a virtual environment.
+
+        Importing at the module level ensures that it will not attempt to import the
+        library before it is installed.
+        """
+        from time import sleep
+
+        from colorama import Back, Fore, Style
+
+        print(Fore.RED + "some red text")
+        print(Back.GREEN + "and with a green background")
+        print(Style.DIM + "and in dim text")
+        print(Style.RESET_ALL)
+        for _ in range(4):
+            print(Style.DIM + "Please wait...", flush=True)
+            sleep(1)
+        print("Finished")
+
+    virtualenv_task = callable_virtualenv()
+----------------------
+@task.docker(image="python:3.9-slim-bullseye", multiple_outputs=True)
+def transform(order_data_dict: dict):
+    """
+    #### Transform task
+    A simple Transform task which takes in the collection of order data and
+    computes the total order value.
+    """
+    total_order_value = 0
+
+    for value in order_data_dict.values():
+        total_order_value += value
+
+    return {"total_order_value": total_order_value}
+------------------------
+@task.kubernetes(
+    image="python:3.8-slim-buster",
+    name="k8s_test",
+    namespace="default",
+    in_cluster=False,
+    config_file="/path/to/.kube/config",
+)
+def execute_in_k8s_pod():
+    import time
+
+    print("Hello from k8s pod")
+    time.sleep(2)
+
+@task.kubernetes(image="python:3.8-slim-buster", namespace="default", in_cluster=False)
+def print_pattern():
+    n = 5
+    for i in range(0, n):
+        # inner loop to handle number of columns
+        # values changing acc. to outer loop
+        for j in range(0, i + 1):
+            # printing stars
+            print("* ", end="")
+
+        # ending line after each row
+        print("\r")
+
+execute_in_k8s_pod_instance = execute_in_k8s_pod()
+print_pattern_instance = print_pattern()
+
+execute_in_k8s_pod_instance >> print_pattern_instance
+------------------------------
+BASE_PATH = "salesforce/customers"
+FILE_NAME = "customer_daily_extract_{{ ds_nodash }}.csv"
+
+
+upload_salesforce_data_to_s3_landing = SalesforceToS3Operator(
+    task_id="upload_salesforce_data_to_s3",
+    salesforce_query="SELECT Id, Name, Company, Phone, Email, LastModifiedDate, IsActive FROM Customers",
+    s3_bucket_name="landing-bucket",
+    s3_key=f"{BASE_PATH}/{FILE_NAME}",
+    salesforce_conn_id="salesforce",
+    aws_conn_id="s3",
+    replace=True,
+)
+
+
+store_to_s3_data_lake = S3CopyObjectOperator(
+    task_id="store_to_s3_data_lake",
+    aws_conn_id="s3",
+    source_bucket_key=upload_salesforce_data_to_s3_landing.output,
+    dest_bucket_name="data_lake",
+    dest_bucket_key=f"""{BASE_PATH}/{"{{ execution_date.strftime('%Y/%m/%d') }}"}/{FILE_NAME}""",
+)
+-------------------------
+DOCKER
+
+# Download the docker-compose.yaml file
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml'
+
+# Make expected directories and set an expected environment variable
+mkdir -p ./dags ./logs ./plugins
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+# Initialize the database
+docker-compose up airflow-init
+
+# Start up all services
+docker-compose up
+-------------------------------
+Connection Id: tutorial_pg_conn
+
+Connection Type: postgres
+
+Host: postgres
+
+Schema: airflow
+
+Login: airflow
+
+Password: airflow
+
+Port: 5432
+---------------------------
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+
+create_employees_table = PostgresOperator(
+    task_id="create_employees_table",
+    postgres_conn_id="tutorial_pg_conn",
+    sql="""
+        CREATE TABLE IF NOT EXISTS employees (
+            "Serial Number" NUMERIC PRIMARY KEY,
+            "Company Name" TEXT,
+            "Employee Markme" TEXT,
+            "Description" TEXT,
+            "Leave" INTEGER
+        );""",
+)
+
+create_employees_temp_table = PostgresOperator(
+    task_id="create_employees_temp_table",
+    postgres_conn_id="tutorial_pg_conn",
+    sql="""
+        DROP TABLE IF EXISTS employees_temp;
+        CREATE TABLE employees_temp (
+            "Serial Number" NUMERIC PRIMARY KEY,
+            "Company Name" TEXT,
+            "Employee Markme" TEXT,
+            "Description" TEXT,
+            "Leave" INTEGER
+        );""",
+)
+-------------------------
+If you want to abstract these sql statements out of your DAG, you can move the statements sql files somewhere within the dags/ directory and pass the sql file_path (relative to dags/) to the sql kwarg. For employees for example, create a sql directory in dags/, put employees DDL in dags/sql/employees_schema.sql, and modify the PostgresOperator() to:
+
+create_employees_table = PostgresOperator(
+    task_id="create_employees_table",
+    postgres_conn_id="tutorial_pg_conn",
+    sql="sql/employees_schema.sql",
+)
+-----------------------------
+Here we retrieve data, save it to a file on our Airflow instance, and load the data from that file into an intermediate table where we can execute data cleaning steps.
+
+import os
+import requests
+from airflow.decorators import task
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+
+@task
+def get_data():
+    # NOTE: configure this as appropriate for your airflow environment
+    data_path = "/opt/airflow/dags/files/employees.csv"
+    os.makedirs(os.path.dirname(data_path), exist_ok=True)
+
+    url = "https://raw.githubusercontent.com/apache/airflow/main/docs/apache-airflow/tutorial/pipeline_example.csv"
+
+    response = requests.request("GET", url)
+
+    with open(data_path, "w") as file:
+        file.write(response.text)
+
+    postgres_hook = PostgresHook(postgres_conn_id="tutorial_pg_conn")
+    conn = postgres_hook.get_conn()
+    cur = conn.cursor()
+    with open(data_path, "r") as file:
+        cur.copy_expert(
+            "COPY employees_temp FROM STDIN WITH CSV HEADER DELIMITER AS ',' QUOTE '\"'",
+            file,
+        )
+    conn.commit()
+-------------------------
+from airflow.decorators import task
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+
+@task
+def merge_data():
+    query = """
+        INSERT INTO employees
+        SELECT *
+        FROM (
+            SELECT DISTINCT *
+            FROM employees_temp
+        ) t
+        ON CONFLICT ("Serial Number") DO UPDATE
+        SET
+              "Employee Markme" = excluded."Employee Markme",
+              "Description" = excluded."Description",
+              "Leave" = excluded."Leave";
+    """
+    try:
+        postgres_hook = PostgresHook(postgres_conn_id="tutorial_pg_conn")
+        conn = postgres_hook.get_conn()
+        cur = conn.cursor()
+        cur.execute(query)
+        conn.commit()
+        return 0
+    except Exception as e:
+        return 1
+------------------------
+import datetime
+import pendulum
+import os
+
+import requests
+from airflow.decorators import dag, task
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+
+
+@dag(
+    dag_id="process-employees",
+    schedule_interval="0 0 * * *",
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    dagrun_timeout=datetime.timedelta(minutes=60),
+)
+def ProcessEmployees():
+    create_employees_table = PostgresOperator(
+        task_id="create_employees_table",
+        postgres_conn_id="tutorial_pg_conn",
+        sql="""
+            CREATE TABLE IF NOT EXISTS employees (
+                "Serial Number" NUMERIC PRIMARY KEY,
+                "Company Name" TEXT,
+                "Employee Markme" TEXT,
+                "Description" TEXT,
+                "Leave" INTEGER
+            );""",
+    )
+
+    create_employees_temp_table = PostgresOperator(
+        task_id="create_employees_temp_table",
+        postgres_conn_id="tutorial_pg_conn",
+        sql="""
+            DROP TABLE IF EXISTS employees_temp;
+            CREATE TABLE employees_temp (
+                "Serial Number" NUMERIC PRIMARY KEY,
+                "Company Name" TEXT,
+                "Employee Markme" TEXT,
+                "Description" TEXT,
+                "Leave" INTEGER
+            );""",
+    )
+
+    @task
+    def get_data():
+        # NOTE: configure this as appropriate for your airflow environment
+        data_path = "/opt/airflow/dags/files/employees.csv"
+        os.makedirs(os.path.dirname(data_path), exist_ok=True)
+
+        url = "https://raw.githubusercontent.com/apache/airflow/main/docs/apache-airflow/tutorial/pipeline_example.csv"
+
+        response = requests.request("GET", url)
+
+        with open(data_path, "w") as file:
+            file.write(response.text)
+
+        postgres_hook = PostgresHook(postgres_conn_id="tutorial_pg_conn")
+        conn = postgres_hook.get_conn()
+        cur = conn.cursor()
+        with open(data_path, "r") as file:
+            cur.copy_expert(
+                "COPY employees_temp FROM STDIN WITH CSV HEADER DELIMITER AS ',' QUOTE '\"'",
+                file,
+            )
+        conn.commit()
+
+    @task
+    def merge_data():
+        query = """
+            INSERT INTO employees
+            SELECT *
+            FROM (
+                SELECT DISTINCT *
+                FROM employees_temp
+            ) t
+            ON CONFLICT ("Serial Number") DO UPDATE
+            SET
+              "Employee Markme" = excluded."Employee Markme",
+              "Description" = excluded."Description",
+              "Leave" = excluded."Leave";
+        """
+        try:
+            postgres_hook = PostgresHook(postgres_conn_id="tutorial_pg_conn")
+            conn = postgres_hook.get_conn()
+            cur = conn.cursor()
+            cur.execute(query)
+            conn.commit()
+            return 0
+        except Exception as e:
+            return 1
+
+    [create_employees_table, create_employees_temp_table] >> get_data() >> merge_data()
+
+
+dag = ProcessEmployees()
+---------------------------
+notifier:
+from airflow.notifications.basenotifier import BaseNotifier
+from my_provider import send_message
+
+
+class MyNotifier(BaseNotifier):
+    template_fields = ("message",)
+
+    def __init__(self, message):
+        self.message = message
+
+    def notify(self, context):
+        # Send notification here, below is an example
+        title = f"Task {context['task_instance'].task_id} failed"
+        send_message(title, self.message)
+-----------------------------
+from datetime import datetime
+
+from airflow.models.dag import DAG
+from airflow.operators.bash import BashOperator
+
+from myprovider.notifier import MyNotifier
+
+with DAG(
+    dag_id="example_notifier",
+    start_date=datetime(2022, 1, 1),
+    schedule_interval=None,
+    on_success_callback=MyNotifier(message="Success!"),
+    on_failure_callback=MyNotifier(message="Failure!"),
+):
+    task = BashOperator(
+        task_id="example_task",
+        bash_command="exit 1",
+        on_success_callback=MyNotifier(message="Task Succeeded!"),
+    )
+--------------------------------
+You need to create a database and a database user that Airflow will use to access this database. In the example below, a database airflow_db and user with username airflow_user with password airflow_pass will be created
+
+CREATE DATABASE airflow_db;
+CREATE USER airflow_user WITH PASSWORD 'airflow_pass';
+GRANT ALL PRIVILEGES ON DATABASE airflow_db TO airflow_user;
+-- PostgreSQL 15 requires additional privileges:
+USE airflow_db;
+GRANT ALL ON SCHEMA public TO airflow_user;
+----------------------
+https://airflow.apache.org/docs/apache-airflow/stable/howto/set-up-database.html
+https://airflow.apache.org/docs/apache-airflow/stable/howto/operator/index.html
+-----------------------
+https://airflow.apache.org/docs/apache-airflow/stable/howto/create-custom-decorator.html
+-----------------
+https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/index.html
+-----------------------------
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/operators/transfer/local_to_gcs.html
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/operators/transfer/gcs_to_local.html
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_api/airflow/providers/google/cloud/transfers/gcs_to_bigquery/index.html
+
+https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html
+
+https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html
+-------------------------------------
+https://youtu.be/Gtzm8KU005I
+----------
+https://airflow.apache.org/docs/apache-airflow-providers-google/1.0.0/_api/airflow/providers/google/cloud/hooks/gcs/index.html
+---------------------------------------------
+https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/operators/transfer/local_to_gcs.html
+https://console.cloud.google.com/compute/instances?project=radiant-cycle-399718
+https://github.com/SSTDevs/airflow
+http://34.42.105.22:8080/home
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_api/airflow/providers/google/cloud/transfers/local_to_gcs/index.html#airflow.providers.google.cloud.transfers.local_to_gcs.LocalFilesystemToGCSOperator
+https://colab.research.google.com/drive/1jzTA7YOkUun3veFiG3_sDPvsDEUbLDv7#scrollTo=8Bj0CizJ11-e
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_modules/tests/system/providers/google/cloud/gcs/example_gcs_upload_download.html
+-----------------
+ps -ef | grep "airflow"
+https://stackoverflow.com/questions/49357352/read-csv-from-google-cloud-storage-to-pandas-dataframe
+
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_api/airflow/providers/google/cloud/operators/dataflow/index.html#module-airflow.providers.google.cloud.operators.dataflow
+
+https://www.pythonpool.com/fixed-modulenotfounderror-no-module-named-_bz2/
+https://cloud.google.com/dataflow/docs/guides/setting-pipeline-options
+https://github.com/SSTDevs/airflow/blob/main/configvm.sh
+https://colab.research.google.com/drive/1MNa1zizoF7INHa1y45KLMN_4k8vMSPiF?usp=sharing
+https://beam.apache.org/documentation/programming-guide/
+https://beam.apache.org/documentation/dsls/dataframes/overview/#:~:text=In%20order%20to%20convert%20a,a%20PCollection%2C%20see%20Creating%20schemas.
+https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html
+https://numpy.org/doc/stable/reference/generated/numpy.reshape.html
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_api/airflow/providers/google/cloud/operators/dataflow/index.html#airflow.providers.google.cloud.operators.dataflow.DataflowCreatePythonJobOperator
+https://airflow.apache.org/docs/apache-airflow-providers-google/stable/_api/airflow/providers/google/cloud/operators/dataflow/index.html#airflow.providers.google.cloud.operators.dataflow.DataflowCreatePythonJobOperator
+https://colab.research.google.com/drive/13eTLvU2NEALSUkaiOyPLwhKwoTA80Tx2#scrollTo=YNgEW6WZr5r9
+
+import sys
+sys.argv
+runner='DataflowRunner',
+
+airflow webserver -D
+
+ find . -name
+---------------------------
+https://github.com/dlamarca1/Aulas_Python
+https://airflow.apache.org/docs/apache-airflow/stable/_modules/airflow/operators/bash.html#BashOperator
+http://34.68.253.170:8080/dags/git_clone_dag/grid
+https://airflow.apache.org/docs/apache-airflow/stable/howto/operator/bash.html
+https://colab.research.google.com/drive/13eTLvU2NEALSUkaiOyPLwhKwoTA80Tx2#scrollTo=2XU0_jQtf3vk
+https://console.cloud.google.com/compute/instances?project=radiant-cycle-399718
+https://pola-rs.github.io/polars/py-polars/html/reference/dataframe/api/polars.DataFrame.with_columns.html
+https://blog.jetbrains.com/dataspell/2023/08/polars-vs-pandas-what-s-the-difference/
+https://pola-rs.github.io/polars/py-polars/html/reference/expressions/api/polars.Expr.fill_null.html
+----------------------------
+shopt -s extglob
+rm -- !(file.txt)
+https://app.diagrams.net/#G1ZhC9x5Gn8wo0lCtuJAenSbPnaBt2V-_W
+
+https://app.diagrams.net/#G1ZhC9x5Gn8wo0lCtuJAenSbPnaBt2V-_W
+----------------------
+add firestore
+compute engine for mysql..
+cluster gke
+add AlloyDB
+HDFS DATAPROC
+https://app.diagrams.net/?libs=gcp2#G1H22Yk-f2mCICNrvatpW_wFVPucY5TJ7C
